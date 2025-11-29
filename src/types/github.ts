@@ -58,9 +58,29 @@ export interface Project {
   thumbnail?: string;
 }
 
+export interface Experience {
+  company: string;
+  role: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  technologies: string[];
+  logo?: string;
+}
+
+export interface Certification {
+  name: string;
+  issuer: string;
+  date: string;
+  url?: string;
+  image?: string;
+}
+
 export interface PortfolioData {
   user: GitHubUser | null;
   projects: Project[];
   skills: Skill[];
   readme: string | null;
+  experience: Experience[];
+  certifications: Certification[];
 }

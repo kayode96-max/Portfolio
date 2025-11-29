@@ -6,3 +6,5 @@ export { Projects } from './Projects';
 export { Contact } from './Contact';
 export { Footer } from './Footer';
 export { PortfolioClient } from './PortfolioClient';
+export { ExperienceSection } from './Experience';
+export { Certifications } from './Certifications';

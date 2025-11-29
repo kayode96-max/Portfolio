@@ -1,4 +1,5 @@
-import { GitHubRepo, GitHubUser, Project, Skill, PortfolioData } from '@/types';
+import { GitHubRepo, GitHubUser, Project, Skill, PortfolioData, Experience } from '@/types';
+import { portfolioConfig } from '@/data/config';
 
 const GITHUB_API_BASE = 'https://api.github.com';
 
@@ -188,10 +189,40 @@ export async function fetchPortfolioData(username: string = GITHUB_USERNAME): Pr
   const skills = extractSkillsFromRepos(repos);
   const projects = transformReposToProjects(repos, username);
 
+  // Merge manual projects with GitHub projects
+  const manualProjects: Project[] = portfolioConfig.projects.map((p, index) => ({
+    id: -1 - index, // Negative IDs for manual projects
+    name: p.name,
+    description: p.description,
+    url: p.url,
+    language: p.language,
+    stars: p.stars,
+    forks: p.forks,
+    topics: p.topics,
+    updatedAt: p.updatedAt,
+    thumbnail: p.thumbnail,
+  }));
+
+  const allProjects = [...manualProjects, ...projects];
+
+  // Merge manual skills with GitHub skills
+  // We'll prioritize manual skills if there are duplicates (though simple concatenation is usually fine)
+  const allSkills = [...portfolioConfig.skills, ...skills];
+
+  // Override user data with manual config if present
+  if (user) {
+    if (portfolioConfig.name) user.name = portfolioConfig.name;
+    if (portfolioConfig.email) user.email = portfolioConfig.email;
+    if (portfolioConfig.location) user.location = portfolioConfig.location;
+    if (portfolioConfig.title) user.bio = portfolioConfig.title + ' | ' + (user.bio || '');
+  }
+
   return {
     user,
-    projects,
-    skills,
+    projects: allProjects,
+    skills: allSkills,
     readme,
+    experience: portfolioConfig.experience,
+    certifications: portfolioConfig.certifications || [],
   };
 }

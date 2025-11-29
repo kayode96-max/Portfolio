@@ -1,6 +1,6 @@
 'use client';
 
-import { Header, Hero, About, Skills, Projects, Contact, Footer } from '@/components';
+import { Header, Hero, About, Skills, Projects, Contact, Footer, ExperienceSection, Certifications } from '@/components';
 import { PortfolioData } from '@/types';
 
 interface PortfolioClientProps {
@@ -14,6 +14,8 @@ export function PortfolioClient({ data }: PortfolioClientProps) {
       <main>
         <Hero user={data.user} />
         <About user={data.user} readme={data.readme} />
+        <ExperienceSection experience={data.experience} />
+        <Certifications certifications={data.certifications} />
         <Skills skills={data.skills} />
         <Projects projects={data.projects} />
         <Contact user={data.user} />
